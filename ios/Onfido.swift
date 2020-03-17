@@ -19,13 +19,20 @@ class Onfido: NSObject {
                    resolver resolve: @escaping RCTResponseSenderBlock,
                    rejecter reject: @escaping RCTResponseSenderBlock) {
 
+    let appearance = Appearance(
+      primaryColor: colorWithHexString(hexString: "#FF6B00"),
+      primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
+      primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
+      secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
+    )
+
     let onfidoConfig = try! OnfidoConfig.builder()
       .withToken(token)
-      .withWelcomeStep()
-      .withDocumentStep()
       .withApplicantId(id) 
-      // .withDocumentStep(ofType: .drivingLicence, andCountryCode: countryId)
+      .withAppearance(appearance)
+      .withDocumentStep(ofType: .drivingLicence, andCountryCode: countryId)
       .withFaceStep(ofVariant: .video(withConfiguration: nil))
+      .withCustomLocalization()
       .build()
        
     let onfidoFlow = OnfidoFlow(withConfiguration: onfidoConfig)
@@ -68,5 +75,22 @@ class Onfido: NSObject {
   
   private func dismiss() {
     UIApplication.shared.windows.first?.rootViewController?.presentedViewController?.dismiss(animated: true)
+  }
+
+  func colorWithHexString(hexString: String, alpha:CGFloat = 1.0) -> UIColor {
+      let hexint = Int(self.intFromHexString(hexStr: hexString))
+      let red = CGFloat((hexint & 0xff0000) >> 16) / 255.0
+      let green = CGFloat((hexint & 0xff00) >> 8) / 255.0
+      let blue = CGFloat((hexint & 0xff) >> 0) / 255.0
+      let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+      return color
+  }
+
+  func intFromHexString(hexStr: String) -> UInt32 {
+      var hexInt: UInt32 = 0
+      let scanner: Scanner = Scanner(string: hexStr)
+      scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
+      scanner.scanHexInt32(&hexInt)
+      return hexInt
   }
 }
