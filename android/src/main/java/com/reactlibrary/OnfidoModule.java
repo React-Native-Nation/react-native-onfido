@@ -10,16 +10,23 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.errors.OnfidoException;
-import com.onfido.api.client.data.Applicant;
+import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
+import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
+import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
+import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.upload.Captures;
+import com.onfido.android.sdk.capture.utils.CountryCode;
+
 import android.widget.Toast;
 
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class OnfidoModule extends ReactContextBaseJavaModule {
@@ -37,17 +44,17 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
             super.onActivityResult(requestCode, resultCode, data);
             client.handleActivityResult(resultCode, data, new Onfido.OnfidoResultListener() {
                 @Override
-                public void userCompleted(Applicant applicant, Captures captures) {
-                    mSuccessCallback.invoke(applicant.getId());
+                public void userCompleted(Captures captures) {
+                    mSuccessCallback.invoke();
                 }
 
                 @Override
-                public void userExited(ExitCode exitCode, Applicant applicant) {
+                public void userExited(ExitCode exitCode) {
                     mErrorCallback.invoke(exitCode.toString());
                 }
 
                 @Override
-                public void onError(OnfidoException e, Applicant applicant) {
+                public void onError(OnfidoException e) {
                     mErrorCallback.invoke(e.getMessage());
                 }
             });
@@ -68,7 +75,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startSDK(String token, String applicantId, String countryCode, Callback successCallback, Callback errorCallback) {
-        
+
         Activity currentActivity = getCurrentActivity();
         mSuccessCallback = successCallback;
         mErrorCallback = errorCallback;
@@ -78,11 +85,19 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
             return;
         }
 
+        final FlowStep[] flowStepsWithOptions = new FlowStep[]{
+                new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
+                new FaceCaptureStep(FaceCaptureVariant.VIDEO),
+        };
+
         try {
-            OnfidoConfig onfidoConfig = OnfidoConfig.builder()
-                    .withApplicant(applicantId)
+            OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
                     .withToken(token)
+                    .withApplicant(applicantId)
+                    .withLocale(new Locale("es", "ES"))
+                    .withCustomFlow(flowStepsWithOptions)
                     .build();
+
             client.startActivityForResult(currentActivity, 1, onfidoConfig);
         }
         catch (Exception e) {
