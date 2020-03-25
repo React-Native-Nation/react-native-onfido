@@ -55,7 +55,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
 
                 @Override
                 public void onError(OnfidoException e) {
-                    mErrorCallback.invoke(e.getMessage());
+                    // mErrorCallback.invoke(e.getMessage());
                 }
             });
         }
