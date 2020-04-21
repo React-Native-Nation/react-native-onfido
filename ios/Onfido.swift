@@ -30,7 +30,7 @@ class Onfido: NSObject {
       .withToken(token)
       .withApplicantId(id) 
       .withAppearance(appearance)
-      .withDocumentStep(ofType: .drivingLicence, andCountryCode: countryId)
+      .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
       .withFaceStep(ofVariant: .video(withConfiguration: nil))
       .withCustomLocalization()
       .build()
