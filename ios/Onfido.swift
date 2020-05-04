@@ -20,7 +20,7 @@ class Onfido: NSObject {
                    rejecter reject: @escaping RCTResponseSenderBlock) {
 
     let appearance = Appearance(
-      primaryColor: colorWithHexString(hexString: "#FF6B00"),
+      primaryColor: colorWithHexString(hexString: "#FF9100"),
       primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
       primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
       secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
