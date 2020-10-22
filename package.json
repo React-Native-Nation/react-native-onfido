@@ -1,11 +1,11 @@
 {
   "name": "react-native-onfido",
   "title": "React Native Onfido",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "React Native Onfido",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
