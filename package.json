@@ -9,8 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-onfido.git",
-    "baseUrl": "https://github.com/github_account/react-native-onfido"
+    "url": "git+https://github.com/React-Native-Nation/react-native-onfido.git",
+    "baseUrl": "https://github.com/React-Native-Nation/react-native-onfido"
   },
   "keywords": [
     "react-native"
@@ -27,9 +27,9 @@
     "react-native": "^0.61.5"
   },
   "bugs": {
-    "url": "https://github.com/github_account/react-native-onfido/issues"
+    "url": "https://github.com/React-Native-Nation/react-native-onfido/issues"
   },
-  "homepage": "https://github.com/github_account/react-native-onfido#readme",
+  "homepage": "https://github.com/React-Native-Nation/react-native-onfido#readme",
   "directories": {
     "example": "example"
   }
