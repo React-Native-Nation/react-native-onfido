@@ -54,9 +54,15 @@ class Onfido: NSObject {
       let onfidoRun = try onfidoFlow.run()
       onfidoRun.modalPresentationStyle = .fullScreen
       UIApplication.shared.windows.first?.rootViewController?.present(onfidoRun, animated: true)
-    } catch {
-      // iOS simulator does not work because of camera
-      showAlert(message: "Couldn't start Onfido flow...(iOS Simultor does not work)")
+    } catch let error {
+      switch error {
+        case OnfidoFlowError.cameraPermission:
+            reject(["cameraPermission"])
+        case OnfidoFlowError.microphonePermission:
+            reject(["microphonePermission"])
+        default:
+            reject(["Error"])
+      }
     }
   }
   
