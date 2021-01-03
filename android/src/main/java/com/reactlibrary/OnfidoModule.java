@@ -87,7 +87,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
 
         final FlowStep[] flowStepsWithOptions = new FlowStep[]{
                 new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
-                new FaceCaptureStep(FaceCaptureVariant.VIDEO),
+                new FaceCaptureStep(FaceCaptureVariant.PHOTO),
         };
 
         try {
