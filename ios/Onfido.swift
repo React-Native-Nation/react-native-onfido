@@ -3,17 +3,32 @@ import Onfido
 
 @objc(Onfido)
 class Onfido: NSObject {
-  @objc func startSDK(_ token: String,
+  @objc func startSDK(_ flowType: String,
+                      token: String,
                       applicantId: String,
                       countryId: String,
                       resolver resolve: @escaping RCTResponseSenderBlock,
                       rejecter reject: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
-      self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+      switch flowType {
+          case "full":
+              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+          case "selfie":
+              self.runSelfie(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+          case "document":
+              self.runDocument(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+          default:
+              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+      }
     }
   }
-  
-  private func run(withToken token: String,
+
+    static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+
+  private func run(
+                   withToken token: String,
                    andApplicantId id: String,
                    andCountryCode countryId: String,
                    resolver resolve: @escaping RCTResponseSenderBlock,
@@ -25,16 +40,16 @@ class Onfido: NSObject {
       primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
       secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
     )
-
+    
     let onfidoConfig = try! OnfidoConfig.builder()
-      .withToken(token)
-      .withApplicantId(id) 
-      .withAppearance(appearance)
-      .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
-      .withFaceStep(ofVariant: .photo(withConfiguration: nil))
-      .withCustomLocalization()
-      .build()
-       
+        .withToken(token)
+        .withApplicantId(id)
+        .withAppearance(appearance)
+        .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
+        .withFaceStep(ofVariant: .photo(withConfiguration: nil))
+        .withCustomLocalization()
+        .build()
+    
     let onfidoFlow = OnfidoFlow(withConfiguration: onfidoConfig)
       .with(responseHandler: { [weak self] response in
         switch response {
@@ -65,7 +80,115 @@ class Onfido: NSObject {
       }
     }
   }
-  
+
+    
+    private func runSelfie(
+                     withToken token: String,
+                     andApplicantId id: String,
+                     andCountryCode countryId: String,
+                     resolver resolve: @escaping RCTResponseSenderBlock,
+                     rejecter reject: @escaping RCTResponseSenderBlock) {
+
+      let appearance = Appearance(
+        primaryColor: colorWithHexString(hexString: "#FF9100"),
+        primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
+        primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
+        secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
+      )
+      
+      let onfidoConfig = try! OnfidoConfig.builder()
+          .withToken(token)
+          .withApplicantId(id)
+          .withAppearance(appearance)
+          .withFaceStep(ofVariant: .photo(withConfiguration: nil))
+          .withCustomLocalization()
+          .build()
+      
+      let onfidoFlow = OnfidoFlow(withConfiguration: onfidoConfig)
+        .with(responseHandler: { [weak self] response in
+          switch response {
+          case let .error(error):
+            self?.dismiss()
+            reject([error.localizedDescription])
+          case .success(_):
+            self?.dismiss()
+            resolve([id])
+          case .cancel:
+            reject(["USER_LEFT_ACTIVITY"])
+            self?.dismiss()
+          }
+        })
+      
+      do {
+        let onfidoRun = try onfidoFlow.run()
+        onfidoRun.modalPresentationStyle = .fullScreen
+        UIApplication.shared.windows.first?.rootViewController?.present(onfidoRun, animated: true)
+      } catch let error {
+        switch error {
+          case OnfidoFlowError.cameraPermission:
+              reject(["cameraPermission"])
+          case OnfidoFlowError.microphonePermission:
+              reject(["microphonePermission"])
+          default:
+              reject(["Error"])
+        }
+      }
+    }
+    
+    private func runDocument(
+                     withToken token: String,
+                     andApplicantId id: String,
+                     andCountryCode countryId: String,
+                     resolver resolve: @escaping RCTResponseSenderBlock,
+                     rejecter reject: @escaping RCTResponseSenderBlock) {
+
+      let appearance = Appearance(
+        primaryColor: colorWithHexString(hexString: "#FF9100"),
+        primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
+        primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
+        secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
+      )
+      
+      let onfidoConfig = try! OnfidoConfig.builder()
+          .withToken(token)
+          .withApplicantId(id)
+          .withAppearance(appearance)
+          .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
+          .withCustomLocalization()
+          .build()
+      
+      let onfidoFlow = OnfidoFlow(withConfiguration: onfidoConfig)
+        .with(responseHandler: { [weak self] response in
+          switch response {
+          case let .error(error):
+            self?.dismiss()
+            reject([error.localizedDescription])
+          case .success(_):
+            self?.dismiss()
+            resolve([id])
+          case .cancel:
+            reject(["USER_LEFT_ACTIVITY"])
+            self?.dismiss()
+          }
+        })
+      
+      do {
+        let onfidoRun = try onfidoFlow.run()
+        onfidoRun.modalPresentationStyle = .fullScreen
+        UIApplication.shared.windows.first?.rootViewController?.present(onfidoRun, animated: true)
+      } catch let error {
+        switch error {
+          case OnfidoFlowError.cameraPermission:
+              reject(["cameraPermission"])
+          case OnfidoFlowError.microphonePermission:
+              reject(["microphonePermission"])
+          default:
+              reject(["Error"])
+        }
+      }
+    }
+
+     
   private func showAlert(message: String) {
     let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
     let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
