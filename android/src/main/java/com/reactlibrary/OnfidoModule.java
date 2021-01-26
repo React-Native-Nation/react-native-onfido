@@ -74,7 +74,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startSDK(String token, String applicantId, String countryCode, Callback successCallback, Callback errorCallback) {
+    public void startSDK(String type, String token, String applicantId, String countryCode, Callback successCallback, Callback errorCallback) {
 
         Activity currentActivity = getCurrentActivity();
         mSuccessCallback = successCallback;
@@ -85,19 +85,42 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        final FlowStep[] flowStepsWithOptions = new FlowStep[]{
-                new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
-                new FaceCaptureStep(FaceCaptureVariant.PHOTO),
-        };
-
         try {
-            OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
-                    .withToken(token)
-                    .withApplicant(applicantId)
-                    .withLocale(new Locale("es", "ES"))
-                    .withCustomFlow(flowStepsWithOptions)
-                    .build();
 
+            OnfidoConfig onfidoConfig = null;
+            if(type == "full") {
+                final FlowStep[] flowStepsWithOptions = new FlowStep[]{
+                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
+                        new FaceCaptureStep(FaceCaptureVariant.PHOTO),
+                };
+
+                onfidoConfig = OnfidoConfig.builder(currentActivity)
+                        .withToken(token)
+                        .withApplicant(applicantId)
+                        .withLocale(new Locale("es", "ES"))
+                        .withCustomFlow(flowStepsWithOptions)
+                        .build();
+            } else if(type == "selfie") {
+                final FlowStep[] flowStepsWithOptions = new FlowStep[]{
+                        new FaceCaptureStep(FaceCaptureVariant.PHOTO),
+                };
+                onfidoConfig = OnfidoConfig.builder(currentActivity)
+                        .withToken(token)
+                        .withApplicant(applicantId)
+                        .withLocale(new Locale("es", "ES"))
+                        .withCustomFlow(flowStepsWithOptions)
+                        .build();
+            } else if(type == "document") {
+                final FlowStep[] flowStepsWithOptions = new FlowStep[]{
+                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
+                };
+                onfidoConfig = OnfidoConfig.builder(currentActivity)
+                        .withToken(token)
+                        .withApplicant(applicantId)
+                        .withLocale(new Locale("es", "ES"))
+                        .withCustomFlow(flowStepsWithOptions)
+                        .build();
+            }
             client.startActivityForResult(currentActivity, 1, onfidoConfig);
         }
         catch (Exception e) {
