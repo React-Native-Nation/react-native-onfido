@@ -46,7 +46,7 @@ class Onfido: NSObject {
         .withApplicantId(id)
         .withAppearance(appearance)
         .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
-          .withFaceStep(ofVariant: .photo(withConfiguration: PhotoStepConfiguration(showSelfieIntroScreen: false)))
+        .withFaceStep(ofVariant: .photo(withConfiguration: nil))
         .withCustomLocalization()
         .build()
     
