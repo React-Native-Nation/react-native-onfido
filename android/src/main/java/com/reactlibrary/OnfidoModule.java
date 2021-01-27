@@ -18,6 +18,7 @@ import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.errors.OnfidoException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.upload.Captures;
@@ -88,7 +89,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
         try {
 
             OnfidoConfig onfidoConfig = null;
-            if(type == "full") {
+            if(type.equals("full")) {
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
                         new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
                         new FaceCaptureStep(FaceCaptureVariant.PHOTO),
@@ -100,9 +101,12 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
                         .withLocale(new Locale("es", "ES"))
                         .withCustomFlow(flowStepsWithOptions)
                         .build();
-            } else if(type == "selfie") {
+            } else if(type.equals("selfie")) {
+                FlowStep faceCaptureStep = FaceCaptureStepBuilder.forVideo()
+                    .withIntro(false)
+                    .build();
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
-                        new FaceCaptureStep(FaceCaptureVariant.PHOTO),
+                        faceCaptureStep,
                 };
                 onfidoConfig = OnfidoConfig.builder(currentActivity)
                         .withToken(token)
@@ -110,7 +114,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
                         .withLocale(new Locale("es", "ES"))
                         .withCustomFlow(flowStepsWithOptions)
                         .build();
-            } else if(type == "document") {
+            } else if(type.equals("document")) {
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
                         new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
                 };
