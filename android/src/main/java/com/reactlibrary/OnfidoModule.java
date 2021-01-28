@@ -102,7 +102,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
                         .withCustomFlow(flowStepsWithOptions)
                         .build();
             } else if(type.equals("selfie")) {
-                FlowStep faceCaptureStep = FaceCaptureStepBuilder.forVideo()
+                FlowStep faceCaptureStep = FaceCaptureStepBuilder.forPhoto()
                     .withIntro(false)
                     .build();
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
