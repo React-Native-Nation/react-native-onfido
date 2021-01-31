@@ -45,7 +45,7 @@ class Onfido: NSObject {
         .withToken(token)
         .withApplicantId(id)
         .withAppearance(appearance)
-        .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
+        .withDocumentStep(ofType: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryId)))
         .withFaceStep(ofVariant: .photo(withConfiguration: nil))
         .withCustomLocalization()
         .build()
@@ -100,7 +100,7 @@ class Onfido: NSObject {
           .withToken(token)
           .withApplicantId(id)
           .withAppearance(appearance)
-          .withFaceStep(ofVariant: .photo(withConfiguration: nil))
+          .withFaceStep(ofVariant: .photo(withConfiguration: PhotoStepConfiguration(showSelfieIntroScreen: false)))
           .withCustomLocalization()
           .build()
       
@@ -153,7 +153,7 @@ class Onfido: NSObject {
           .withToken(token)
           .withApplicantId(id)
           .withAppearance(appearance)
-          .withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryId)
+          .withDocumentStep(ofType: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryId)))
           .withCustomLocalization()
           .build()
       
