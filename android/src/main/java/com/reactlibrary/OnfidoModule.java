@@ -91,7 +91,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
             OnfidoConfig onfidoConfig = null;
             if(type.equals("full")) {
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
-                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
+                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.valueOf(countryCode)),
                         new FaceCaptureStep(FaceCaptureVariant.PHOTO),
                 };
 
@@ -116,7 +116,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
                         .build();
             } else if(type.equals("document")) {
                 final FlowStep[] flowStepsWithOptions = new FlowStep[]{
-                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.CR),
+                        new CaptureScreenStep(DocumentType.NATIONAL_IDENTITY_CARD, CountryCode.valueOf(countryCode)),
                 };
                 onfidoConfig = OnfidoConfig.builder(currentActivity)
                         .withToken(token)
