@@ -8,17 +8,18 @@ class Onfido: NSObject {
                       applicantId: String,
                       countryId: String,
                       resolver resolve: @escaping RCTResponseSenderBlock,
-                      rejecter reject: @escaping RCTResponseSenderBlock) -> Void {
+                      rejecter reject: @escaping RCTResponseSenderBlock) -> Void,
+                      primaryColor: String = "#FF9100"{
     DispatchQueue.main.async {
       switch flowType {
           case "full":
-              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColors)
           case "selfie":
-              self.runSelfie(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+              self.runSelfie(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColor)
           case "document":
-              self.runDocument(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+              self.runDocument(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColor)
           default:
-              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject)
+              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColor)
       }
     }
   }
@@ -32,10 +33,11 @@ class Onfido: NSObject {
                    andApplicantId id: String,
                    andCountryCode countryId: String,
                    resolver resolve: @escaping RCTResponseSenderBlock,
-                   rejecter reject: @escaping RCTResponseSenderBlock) {
+                   rejecter reject: @escaping RCTResponseSenderBlock,
+                   andPrimaryColor primaryColor: String = "#FF9100") {
 
     let appearance = Appearance(
-      primaryColor: colorWithHexString(hexString: "#FF9100"),
+      primaryColor: colorWithHexString(primaryColor),
       primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
       primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
       secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
@@ -87,10 +89,11 @@ class Onfido: NSObject {
                      andApplicantId id: String,
                      andCountryCode countryId: String,
                      resolver resolve: @escaping RCTResponseSenderBlock,
-                     rejecter reject: @escaping RCTResponseSenderBlock) {
+                     rejecter reject: @escaping RCTResponseSenderBlock,
+                     andPrimaryColor primaryColor: String = "#FF9100") {
 
       let appearance = Appearance(
-        primaryColor: colorWithHexString(hexString: "#FF9100"),
+        primaryColor: colorWithHexString(hexString: primaryColor),
         primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
         primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
         secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
@@ -140,10 +143,11 @@ class Onfido: NSObject {
                      andApplicantId id: String,
                      andCountryCode countryId: String,
                      resolver resolve: @escaping RCTResponseSenderBlock,
-                     rejecter reject: @escaping RCTResponseSenderBlock) {
+                     rejecter reject: @escaping RCTResponseSenderBlock,
+                     andPrimaryColor primaryColor: String = "#FF9100") {
 
       let appearance = Appearance(
-        primaryColor: colorWithHexString(hexString: "#FF9100"),
+        primaryColor: colorWithHexString(hexString: primaryColor),
         primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
         primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
         secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
