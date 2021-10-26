@@ -1,7 +1,7 @@
 {
   "name": "react-native-onfido",
   "title": "React Native Onfido",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "React Native Onfido",
   "main": "index.js",
   "scripts": {
