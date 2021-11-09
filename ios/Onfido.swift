@@ -8,12 +8,12 @@ class Onfido: NSObject {
                       applicantId: String,
                       countryId: String,
                       resolver resolve: @escaping RCTResponseSenderBlock,
-                      rejecter reject: @escaping RCTResponseSenderBlock) -> Void,
-                      primaryColor: String = "#FF9100"{
+                      rejecter reject: @escaping RCTResponseSenderBlock,
+                      primaryColor: String = "#FF9100") -> Void{
     DispatchQueue.main.async {
       switch flowType {
           case "full":
-              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColors)
+              self.run(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColor)
           case "selfie":
               self.runSelfie(withToken: token,  andApplicantId: applicantId, andCountryCode: countryId, resolver: resolve, rejecter: reject, andPrimaryColor: primaryColor)
           case "document":
@@ -37,7 +37,7 @@ class Onfido: NSObject {
                    andPrimaryColor primaryColor: String = "#FF9100") {
 
     let appearance = Appearance(
-      primaryColor: colorWithHexString(primaryColor),
+      primaryColor: colorWithHexString(hexString: primaryColor),
       primaryTitleColor: colorWithHexString(hexString: "#FFFFFF"),
       primaryBackgroundPressedColor: colorWithHexString(hexString: "#111222"),
       secondaryBackgroundPressedColor:colorWithHexString(hexString: "#333444")
