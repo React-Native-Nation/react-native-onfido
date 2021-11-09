@@ -10,5 +10,6 @@ RCT_EXTERN_METHOD(startSDK:
                   countryId: (NSString *)countryId
                   resolver:(RCTResponseSenderBlock *)resolve
                   rejecter:(RCTResponseSenderBlock *)reject
+                  primaryColor: (NSString *)primaryColor
                   )
 @end

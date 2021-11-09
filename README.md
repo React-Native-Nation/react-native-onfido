@@ -59,7 +59,9 @@ Onfido.startSDK(
         } else {
             console.log("Flow not finished")
         };
-    });
+    },
+    // Optional iOS primary color
+    primaryColor);
 ```
 
 <a name="community"></a>

@@ -75,7 +75,7 @@ public class OnfidoModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startSDK(String type, String token, String applicantId, String countryCode, Callback successCallback, Callback errorCallback) {
+    public void startSDK(String type, String token, String applicantId, String countryCode, Callback successCallback, Callback errorCallback, String primaryColor) {
 
         Activity currentActivity = getCurrentActivity();
         mSuccessCallback = successCallback;
